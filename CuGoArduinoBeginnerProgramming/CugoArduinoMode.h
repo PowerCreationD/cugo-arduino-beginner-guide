@@ -35,7 +35,7 @@
 
 //encoder_resolution / (2 * wheel_radius_l * PI);
 
-// PID ゲイン調整
+// PID 控制器增益調整
 // L側
 #define L_KP   1.0f   //CuGoV3
 #define L_KI   0.02f   //CuGoV3
@@ -53,13 +53,13 @@
 //const float R_KI = 0.06;
 //const float R_KD = 0.1;
 
-// ローパスフィルタ
+// 低通濾波器
 #define L_LPF   0.2f 
 #define R_LPF   0.2f
 //const float L_LPF = 0.2;
 //const float R_LPF = 0.2;
 
-// PID位置制御のゲイン調整
+// PID 位置控制的增益調整
 #define L_COUNT_KP  0.04f
 #define L_COUNT_KI  0.003f 
 #define L_COUNT_KD  0.01f
@@ -90,7 +90,7 @@
 #define CUGO_PROPO_MIN_B 1100
 #define CUGO_PROPO_MAX_C 2200
 #define CUGO_PROPO_MIN_C 800
-#define CMD_SIZE 60 //　コマンド数上限
+#define CMD_SIZE 60 //　命令數量上限
 #define EXCEPTION_NO -32768 //int下限
 
 //モーター設定

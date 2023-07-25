@@ -178,7 +178,7 @@ CugoArduinoKit 可以使用兩種模式
 
 - <details>
   <summary>請點擊這裡查看答案</summary>
-  讓我們修改 susumu 指令中的內容，使得兩邊履帶行進相同的距離<br>
+  讓我們修改 susumu 指令中的內容，使得兩對邊行進相同的距離<br>
 
    ```c
   void CMD_EXECUTE()

@@ -16,9 +16,9 @@
  ****************************************************************************/
 /*****************CugoArduinoBeginnerProgramming ver1.00*********************/
 /****************************************************************************
- * CugoArduinoBeginnerProgrammingをご利用される方へ
- *  スクロールして「Arduino学習用プログラミングはここから」からご確認ください。
- *  詳細はREADME.mdをご確認ください。
+ * 對於使用 CugoArduinoBeginnerProgramming 的使用者
+ *  請向下滾動至「從這裡開始Arduino學習程式編寫」進行確認
+ *  詳細資訊請參閱 README.md 文件
  ****************************************************************************/
 #include <Arduino.h>
 #include <Servo.h>
@@ -26,10 +26,10 @@
 #include "CugoArduinoMode.h"
 #include "MotorController.h"
 
-//プロトタイプ宣言
+// Prototype 宣告
 void CMD_EXECUTE();
 
-//利用するモーター数の宣言
+// 宣告使用的電機數量
 MotorController motor_controllers[2];
 
 //初期設定
@@ -43,29 +43,29 @@ void setup()
   init_SPI();
 }
 
-//loop内を繰り返し実行
+//loop内重複執行
 void loop()
 {
-  current_time = micros();  // オーバーフローまで約40分
+  current_time = micros();  // 大約需要 40 分鐘左右直到溢位（Overflow）發生
   if (current_time - prev_time_10ms > 10000) 
   {
     job_10ms();
     prev_time_10ms = current_time;
   }
-  display_detail(motor_controllers);//必要に応じてCugoArduinoModeの5～8行目を変更
+  display_detail(motor_controllers);// 根據需要，可以修改 CugoArduinoMode 中的第5至8行
 }
 
-//割り込み処理
+//中斷處理
 ISR(PCINT2_vect)
 {
   if (OLD_PWM_IN_PIN0_VALUE != digitalRead(PWM_IN_PIN0))
   {
     if (LOW == OLD_PWM_IN_PIN0_VALUE)
-    { // 立ち上がり時の処理
+    { // 啟動時的處理
       PIN_UP(0);
     }
     else
-    { // 立下り時の処理
+    { // 關機時的處理
       PIN_DOWN(0);
     }
     OLD_PWM_IN_PIN0_VALUE = OLD_PWM_IN_PIN0_VALUE ? LOW : HIGH;
@@ -109,16 +109,16 @@ void arduino_mode()
 //モード切り替わり確認
 void check_mode_change()
 {
-  noInterrupts();      //割り込み停止
+  noInterrupts();      //中斷停止
   rcTime[0] = time[0];
   rcTime[1] = time[1];
   rcTime[2] = time[2];
-  interrupts();     //割り込み開始
+  interrupts();     //中斷開始
 
-  if (ARDUINO_MODE_IN < rcTime[1] && rcTime[1] < CUGO_PROPO_MAX_B) // MR-8の外れ値が入ったときは遷移させない
+  if (ARDUINO_MODE_IN < rcTime[1] && rcTime[1] < CUGO_PROPO_MAX_B) // 當MR-8出現異常值時，不進行轉換
   {
     if (runMode != ARDUINO_MODE)
-    { // モードが変わった時(RC→ARDUINO)
+    { // 當模式改變時 (RC→ARDUINO)
       Serial.println(F("##########################"));                  
       Serial.println(F("### モード:ARDUINO_MODE ###"));
       Serial.println(F("##########################"));            
@@ -128,10 +128,10 @@ void check_mode_change()
     }
     runMode = ARDUINO_MODE;
   }
-  else if (ARDUINO_MODE_OUT > rcTime[1] && CUGO_PROPO_MIN_B < rcTime[1]) // MR-8の外れ値が入ったときは遷移させない
+  else if (ARDUINO_MODE_OUT > rcTime[1] && CUGO_PROPO_MIN_B < rcTime[1]) // 當MR-8出現異常值時，不進行轉換
   {
     if (runMode != RC_MODE)
-    { // モードが変わった時(ARDUINO→RC)
+    { // 當模式改變時 (ARDUINO→RC)
       Serial.println(F("##########################"));                  
       Serial.println(F("###   モード:RC_MODE    ###"));
       Serial.println(F("##########################"));            

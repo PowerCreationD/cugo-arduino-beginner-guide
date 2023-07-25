@@ -82,6 +82,7 @@ void init_KOPROPO(int runMode, int OLD_PWM_IN_PIN0_VALUE, int OLD_PWM_IN_PIN1_VA
   OLD_PWM_IN_PIN2_VALUE = digitalRead(PWM_IN_PIN2);
 
   // ピン変化割り込みの設定（D5,D6,D7をレジスタ直接読み取りで割り込み処理）
+  // 設置「引腳變化中斷（使用直接讀取寄存器的方式進行D5、D6、D7的中斷處理）」。
   pinMode(PWM_IN_PIN0, INPUT);
   pinMode(PWM_IN_PIN1, INPUT);
   pinMode(PWM_IN_PIN2, INPUT);
@@ -863,23 +864,23 @@ void cmd_end(MotorController motor_controllers[2])
     if (init_current_cmd >= CMD_SIZE)
     {
       //Serial.println("init_current_cmd: " + String(init_current_cmd));
-      Serial.println(F("コマンド上限数以上にコマンドを設定しています。意図しない走行をさせないため強制終了。"));
+      Serial.println(F("已經設定了超過指令上限數量的指令。為了避免非預期的行駛，強制終止。"));
       while (1);
     }
 
     // 初回起動時の処理をここで無効化
     reset_pid_gain(motor_controllers);
     if (ARDUINO_MODE == runMode) {
-      Serial.println(F("###   コマンド準備完了    ###"));
+      Serial.println(F("###   指令準備完成    ###"));
       Serial.println(F("##########################"));
-      Serial.println(F("###   コマンド実行開始    ###"));
+      Serial.println(F("###   指令執行開始    ###"));
     }
-    cmd_init = true;   // 最初の一回だけ。全部のコマンドが終了したとき、最初のコマンドに戻すときにリセット。
+    cmd_init = true;   // 僅限於第一次。當所有指令都執行完畢並且需要重置回第一個指令時，進行重置。
   }
   else
   {
-    // 通常ループ時の処理
-    // すべてのコマンドが終了しているか判定
+    // 正常循環期間的處理
+    // 判斷所有命令是否已完成
   }
 }
 
@@ -927,17 +928,17 @@ void cmd_manager_flags_init(MotorController motor_controllers[2])
   // ここに入ったら終了。
   if (count_done == true && wait_done == true && button_done == true && spi_done == true)
   {
-    //Serial.println(F("すべてのコマンド実行完了。または、初期化のままでコマンド入力できていない。"));
+    //Serial.println(F("所有指令已經執行完畢，或者在初始化狀態下無法輸入指令。"));
     //view_flags();
     end_arduino_mode = true;
   } else {
 
-    Serial.print(F("###"));
+    Serial.print(F("###第"));
     if (current_cmd < 9)
       Serial.print(F("0"));
 
     Serial.print(String(current_cmd + 1));
-    Serial.print(F("番目のコマンド：開始  "));
+    Serial.print(F("個指令：開始  "));
     /*
       float degree = 0 ;
       float distance = 0 ;
@@ -1074,7 +1075,7 @@ void cmd_manager(MotorController motor_controllers[2])
   if (cmd_init == false)
   {
     Serial.println(F("##########################"));
-    Serial.println(F("###   コマンド準備開始    ###"));
+    Serial.println(F("###   指令準備開始    ###"));
   }
   else
   {
@@ -1199,13 +1200,13 @@ void cmd_manager(MotorController motor_controllers[2])
 
         if (end_arduino_mode == true)
         {
-          Serial.println(F("###   コマンド実行終了    ###"));
+          Serial.println(F("###   指令執行結束    ###"));
           Serial.println(F("##########################"));
           reset_arduino_mode_flags();
           end_arduino_mode = false;
           runMode = RC_MODE;
           Serial.println(F("##########################"));
-          Serial.println(F("###   モード:RC_MODE    ###"));
+          Serial.println(F("###   模式:RC_MODE    ###"));
           Serial.println(F("##########################"));
         }
       }
@@ -1226,12 +1227,12 @@ void check_achievement_button_cmd(MotorController motor_controllers[2])
   {
     stop_motor_immediately(motor_controllers);
     button_done = true;
-    Serial.print(F("###"));
+    Serial.print(F("###第"));
     if (current_cmd < 9)
       Serial.print(F("0"));
 
     Serial.print(String(current_cmd + 1));
-    Serial.println(F("番目のコマンド：終了  ボタン　押された  ###"));
+    Serial.println(F("個指令：結束 按鈕 按下  ###"));
   }
 }
 
